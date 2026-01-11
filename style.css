@@ -103,20 +103,22 @@ button:hover {
 }
 
 footer {
-  margin-top: 30px;
-  padding: 15px;
+  background: #1e1e1e;          /* gris foncé */
+  color: #aaa;                  /* texte gris clair */
+  padding: 15px 10px;
   text-align: center;
-  background: #1e1e1e; /* gris foncé */
-  color: #aaa;
-  font-size: 14px;
   border-top: 1px solid #2a2a2a;
+  font-size: 14px;
 }
 
 footer .name {
-  color: #fff;
+  color: #fff;                  /* pseudos en blanc */
   font-weight: 500;
 }
 
-footer p {
-  margin: 0;
+footer h6 {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #777;
+  font-weight: normal;
 }
