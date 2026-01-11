@@ -10,7 +10,7 @@ function getImages() {
 /* 🔍 SEARCH */
 search.addEventListener("input", () => {
   const value = search.value.toLowerCase().trim();
-  const words = value.split(" ").filter(w => w.length > 0);
+  const words = value.split(" ").filter(w => w);
 
   getImages().forEach(img => {
     const tags = img.dataset.tags.toLowerCase();
@@ -25,22 +25,18 @@ randomBtn.addEventListener("click", () => {
     img => img.style.display !== "none"
   );
 
-  if (visibleImages.length === 0) return;
+  if (!visibleImages.length) return;
 
-  const randomImage =
-    visibleImages[Math.floor(Math.random() * visibleImages.length)];
+  const img = visibleImages[
+    Math.floor(Math.random() * visibleImages.length)
+  ];
 
-  randomImage.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-
-  // bonus : ouvre direct en plein écran
-  viewerImg.src = randomImage.src;
+  img.scrollIntoView({ behavior: "smooth", block: "center" });
+  viewerImg.src = img.src;
   viewer.style.display = "flex";
 });
 
-/* 🖼️ PLEIN ÉCRAN */
+/* 🖼️ FULLSCREEN */
 getImages().forEach(img => {
   img.addEventListener("click", () => {
     viewerImg.src = img.src;
@@ -48,29 +44,15 @@ getImages().forEach(img => {
   });
 });
 
-/* ❌ FERMETURE */
+/* ❌ CLOSE */
 viewer.addEventListener("click", () => {
   viewer.style.display = "none";
   viewerImg.src = "";
 });
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
     viewer.style.display = "none";
     viewerImg.src = "";
   }
-});
-
-const overlay = document.getElementById("overlay");
-const overlayImg = document.getElementById("overlayImg");
-
-images.forEach(img => {
-  img.addEventListener("click", () => {
-    overlayImg.src = img.src;
-    overlay.style.display = "flex";
-  });
-});
-
-overlay.addEventListener("click", () => {
-  overlay.style.display = "none";
 });
