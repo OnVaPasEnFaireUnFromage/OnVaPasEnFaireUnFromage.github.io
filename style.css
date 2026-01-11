@@ -102,3 +102,21 @@ button:hover {
   max-height: 95%;
 }
 
+footer {
+  margin-top: 30px;
+  padding: 15px;
+  text-align: center;
+  background: #000;
+  color: #aaa;
+  font-size: 14px;
+  border-top: 1px solid #222;
+}
+
+footer .name {
+  color: #fff;
+  font-weight: 500;
+}
+
+footer p {
+  margin: 0;
+}
