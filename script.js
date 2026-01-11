@@ -5,7 +5,6 @@ function getImages() {
   return document.querySelectorAll("#gallery img");
 }
 
-// 🔍 Recherche
 search.addEventListener("input", () => {
   const value = search.value.toLowerCase().trim();
   const words = value.split(" ").filter(w => w.length > 0);
@@ -18,7 +17,6 @@ search.addEventListener("input", () => {
   });
 });
 
-// 🎲 Random
 randomBtn.addEventListener("click", () => {
   const visibleImages = Array.from(getImages()).filter(
     img => img.style.display !== "none"
@@ -33,4 +31,26 @@ randomBtn.addEventListener("click", () => {
     behavior: "smooth",
     block: "center"
   });
+});
+
+const viewer = document.getElementById("viewer");
+const viewerImg = document.getElementById("viewerImg");
+
+document.addEventListener("click", (e) => {
+  if (e.target.tagName === "IMG" && e.target.closest("#gallery")) {
+    viewerImg.src = e.target.src;
+    viewer.style.display = "flex";
+  }
+
+  if (e.target === viewer) {
+    viewer.style.display = "none";
+    viewerImg.src = "";
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    viewer.style.display = "none";
+    viewerImg.src = "";
+  }
 });
