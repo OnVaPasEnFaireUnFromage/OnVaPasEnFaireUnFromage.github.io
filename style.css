@@ -122,3 +122,25 @@ footer h6 {
   color: #777;
   font-weight: normal;
 }
+
+.dice-button {
+  display: block;
+  width: 80px;
+  height: 80px;
+  background-color: #e0e0e0;
+  border: 3px solid #333;
+  border-radius: 10px;
+  font-size: 24px;
+  color: #333;
+  text-decoration: none; /* Supprime le soulignement du lien */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+}
+
+.dice-button:hover {
+  background-color: #d0d0d0;
+}
