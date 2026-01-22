@@ -103,8 +103,8 @@ button:hover {
 }
 
 footer {
-  background: #1e1e1e;          /* gris foncé */
-  color: #aaa;                  /* texte gris clair */
+  background: #1e1e1e;          
+  color: #aaa;                  
   padding: 15px 10px;
   text-align: center;
   border-top: 1px solid #2a2a2a;
@@ -112,7 +112,7 @@ footer {
 }
 
 footer .name {
-  color: #fff;                  /* pseudos en blanc */
+  color: #fff;                  
   font-weight: 500;
 }
 
@@ -143,4 +143,10 @@ footer h6 {
 
 .dice-button:hover {
   background-color: #d0d0d0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }

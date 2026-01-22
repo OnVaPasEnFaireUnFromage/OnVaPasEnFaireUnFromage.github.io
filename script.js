@@ -7,7 +7,7 @@ function getImages() {
   return Array.from(document.querySelectorAll("#gallery img"));
 }
 
-/* 🔍 SEARCH */
+
 search.addEventListener("input", () => {
   const value = search.value.toLowerCase().trim();
   const words = value.split(" ").filter(w => w);
@@ -19,7 +19,6 @@ search.addEventListener("input", () => {
   });
 });
 
-/* 🎲 RANDOM */
 randomBtn.addEventListener("click", () => {
   const visibleImages = getImages().filter(
     img => img.style.display !== "none"
@@ -36,7 +35,6 @@ randomBtn.addEventListener("click", () => {
   viewer.style.display = "flex";
 });
 
-/* 🖼️ FULLSCREEN */
 getImages().forEach(img => {
   img.addEventListener("click", () => {
     viewerImg.src = img.src;
@@ -44,7 +42,7 @@ getImages().forEach(img => {
   });
 });
 
-/* ❌ CLOSE */
+
 viewer.addEventListener("click", () => {
   viewer.style.display = "none";
   viewerImg.src = "";
