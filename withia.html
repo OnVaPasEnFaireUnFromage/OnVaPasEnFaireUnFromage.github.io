@@ -40,14 +40,6 @@
 
         <img src="https://zerostorage.net/api/files/download/c58b05bf-f7b7-4a99-84e7-21d29e5f5ec0" alt="Shinobu test a completer" data-tags="Shinobu Demon Slayer">
                 <img src="" alt="" data-tags="">
-        <img src="https://zerostorage.net/api/files/download/c58b05bf-f7b7-4a99-84e7-21d29e5f5ec0" alt="Shinobu test a completer" data-tags="Shinobu Demon Slayer">
-                <img src="" alt="" data-tags="">
-        <img src="https://zerostorage.net/api/files/download/c58b05bf-f7b7-4a99-84e7-21d29e5f5ec0" alt="Shinobu test a completer" data-tags="Shinobu Demon Slayer">
-                <img src="" alt="" data-tags="">
-        <img src="https://zerostorage.net/api/files/download/c58b05bf-f7b7-4a99-84e7-21d29e5f5ec0" alt="Shinobu test a completer" data-tags="Shinobu Demon Slayer">
-                <img src="" alt="" data-tags="">
-        <img src="https://zerostorage.net/api/files/download/c58b05bf-f7b7-4a99-84e7-21d29e5f5ec0" alt="Shinobu test a completer" data-tags="Shinobu Demon Slayer">
-                <img src="" alt="" data-tags="">
 
 </main>
 
@@ -66,6 +58,30 @@
     <h6 style="text-align: center;">Cette section du site contient du contenu généré entièrement ou partiellement par de l'IA.</h6>
   </p>
 </footer>
+
+<script>
+    withoutiaBtn.addEventListener("click", () => {
+  window.location.href = "withoutia.html";
+});
+</script>
+
+<script> 
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // scroll vers le bas
+    header.classList.add("hide");
+  } else {
+    // scroll vers le haut
+    header.classList.remove("hide");
+  }
+
+  lastScroll = currentScroll;
+});
+
+</script>
+
 <script>
 const supabaseClient = supabase.createClient(
   "https://waljqaxkbvzidkrzbcbz.supabase.co",
