@@ -63,3 +63,20 @@ loginBtn.addEventListener("click", () => {
 withiaBtn.addEventListener("click", () => {
   window.location.href = "withia.html";
 });
+
+let lastScroll = 0;
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // scroll vers le bas
+    header.classList.add("hide");
+  } else {
+    // scroll vers le haut
+    header.classList.remove("hide");
+  }
+
+  lastScroll = currentScroll;
+});

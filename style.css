@@ -199,3 +199,37 @@ header {
   width: 90%;
   max-width: 320px;
 }
+
+@media (min-width: 900px) {
+
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header h3 {
+    font-size: 2.6rem;
+    margin: 0;
+  }
+
+  #search {
+    width: 380px;
+  }
+
+  .header-buttons {
+    justify-content: flex-end;
+  }
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+/* quand caché */
+header.hide {
+  transform: translateY(-80%);
+}
