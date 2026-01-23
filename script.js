@@ -56,6 +56,10 @@ document.addEventListener("keydown", e => {
 });
 const iaBtn = document.getElementById("iaBtn");
 
-iaBtn.addEventListener("click", () => {
-  window.location.href = "onvapasenfaireunfromage.html";
+loginBtn.addEventListener("click", () => {
+  window.location.href = "login.html";
+});
+
+withiaBtn.addEventListener("click", () => {
+  window.location.href = "withia.html";
 });
