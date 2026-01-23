@@ -2,56 +2,43 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Se connecter</title>
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <header class="card-head">
+        <h1>Goon Multiverse</h1>
+        <p>Se connecter / créer un compte</p>
+      </header>
 
-<h2>Connexion</h2>
+      <div class="field">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="email@example.com">
+      </div>
 
-<input type="email" id="email" placeholder="Email"><br>
-<input type="password" id="password" placeholder="Mot de passe"><br><br>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input id="password" type="password" placeholder="********">
+      </div>
 
-<button onclick="login()">Se connecter</button>
-<button onclick="signup()">Créer un compte</button>
+      <div class="row">
+        <button id="loginBtn">Se connecter</button>
+        <button id="signupBtn">Créer un compte</button>
+      </div>
 
-<p id="msg"></p>
+      <div class="links">
+        <a href="withoutia.html">← Retour</a>
+        <a id="forgot" href="#">Mot de passe oublié</a>
+      </div>
 
-<script>
-const supabaseClient = supabase.createClient(
-  "https://waljqaxkbvzidkrzbcbz.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw"
-);
+      <div id="msg"></div>
+    </div>
+  </div>
 
-async function signup() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  document.getElementById("msg").innerText =
-    error ? error.message : "Compte créé, check tes mails.";
-}
-
-async function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    document.getElementById("msg").innerText = error.message;
-  } else {
-    window.location.href = "index.html";
-  }
-}
-</script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="login.js"></script>
 </body>
 </html>
