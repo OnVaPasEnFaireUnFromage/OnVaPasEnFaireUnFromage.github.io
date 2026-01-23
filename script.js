@@ -64,6 +64,10 @@ withiaBtn.addEventListener("click", () => {
   window.location.href = "withia.html";
 });
 
+withoutiaBtn.addEventListener("click", () => {
+  window.location.href = "withoutia.html";
+});
+
 let lastScroll = 0;
 const header = document.querySelector("header");
 
