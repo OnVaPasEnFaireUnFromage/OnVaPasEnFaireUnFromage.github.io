@@ -9,12 +9,12 @@
 <body>
     <header>
 
-        <center><h3><a href="withia.html">Goon Multiverse IA 🔥</a></h3>
+        <h3><a href="withia.html">Goon Multiverse IA 🔥</a></h3>
         <div class="search-box"><input type="text" id="search" placeholder="Rechercher...">
         <div class="buttons">
         <button id="randomBtn">🎲</button>
         <button id="loginBtn">Login</button>
-        <button id="withoutiaBtn">Section sans IA</button></center>
+        <button id="withoutiaBtn">Section sans IA</button>
       </div>
     </div>
 
@@ -65,22 +65,23 @@
 });
 </script>
 
-<script> 
+<script>
+const header = document.querySelector("header");
+let lastScroll = 0;
+
 window.addEventListener("scroll", () => {
   const currentScroll = window.scrollY;
 
   if (currentScroll > lastScroll && currentScroll > 100) {
-    // scroll vers le bas
     header.classList.add("hide");
   } else {
-    // scroll vers le haut
     header.classList.remove("hide");
   }
 
   lastScroll = currentScroll;
 });
-
 </script>
+
 
 <script>
 const supabaseClient = supabase.createClient(
