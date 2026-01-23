@@ -54,19 +54,22 @@ document.addEventListener("keydown", e => {
     viewerImg.src = "";
   }
 });
-const iaBtn = document.getElementById("iaBtn");
 
-loginBtn.addEventListener("click", () => {
-  window.location.href = "login.html";
-});
+const loginBtn = document.getElementById("loginBtn");
+const withiaBtn = document.getElementById("withiaBtn");
 
-withiaBtn.addEventListener("click", () => {
-  window.location.href = "withia.html";
-});
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    window.location.href = "login.html";
+  });
+}
 
-withoutiaBtn.addEventListener("click", () => {
-  window.location.href = "withoutia.html";
-});
+if (withiaBtn) {
+  withiaBtn.addEventListener("click", () => {
+    window.location.href = "withia.html";
+  });
+}
+
 
 let lastScroll = 0;
 const header = document.querySelector("header");
