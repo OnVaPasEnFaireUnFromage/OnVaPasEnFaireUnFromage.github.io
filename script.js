@@ -54,3 +54,8 @@ document.addEventListener("keydown", e => {
     viewerImg.src = "";
   }
 });
+const iaBtn = document.getElementById("iaBtn");
+
+iaBtn.addEventListener("click", () => {
+  window.location.href = "onvapasenfaireunfromage.html";
+});
