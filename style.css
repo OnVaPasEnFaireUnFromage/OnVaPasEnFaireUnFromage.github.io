@@ -148,3 +148,16 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
+
+.search-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
