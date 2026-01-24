@@ -72,3 +72,33 @@ forgotBtn.onclick = async e => {
   if (error) showMsg(error.message, "err");
   else showMsg("Email envoyé", "ok");
 };
+
+async function checkRole() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (data.role === "admin" || data.role === "contributor") {
+    document.getElementById("addBtn").style.display = "block";
+  }
+}
+
+checkRole();
+
+const addBtn = document.getElementById("addBtn");
+
+if (addBtn) {
+  addBtn.addEventListener("click", () => {
+    window.location.href = "upload.html";
+  });
+}
