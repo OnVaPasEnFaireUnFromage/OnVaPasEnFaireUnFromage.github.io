@@ -1,6 +1,10 @@
 const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
+console.log("login.js chargé");
+console.log(window.supabase);
+
+
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
@@ -25,6 +29,7 @@ function setLoading(state) {
 }
 
 loginBtn.onclick = async () => {
+  console.log("CLICK LOGIN");
   if (!email.value || !password.value) {
     showMsg("Champs manquants", "err");
     return;
@@ -45,6 +50,7 @@ loginBtn.onclick = async () => {
 };
 
 signupBtn.onclick = async () => {
+  console.log("CLICK SIGNUP");
   if (!email.value || !password.value) {
     showMsg("Champs manquants", "err");
     return;
@@ -73,3 +79,6 @@ forgotBtn.onclick = async e => {
   else showMsg("Email envoyé", "ok");
 };
 
+loginBtn.onclick = () => {
+  alert("login cliqué");
+};
