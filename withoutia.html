@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Goon Multiverse</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goon Multiverse</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
 
-        <h3><a href="withoutia.html">Goon Multiverse 🔥</a></h3>
-        <div class="search-box"><input type="text" id="search" placeholder="Rechercher...">
-        <div class="buttons">
-        <button id="randomBtn">🎲</button>
-        <button id="loginBtn">Login</button>
-        <button id="withiaBtn">Section IA</button>
-        <button id="addBtn" style="display:none;">➕</button>
-        <button id="accountBtn">Compte</button>
+<header>
+  <h3><a href="withoutia.html">Goon Multiverse 🔥</a></h3>
 
-      </div>
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Rechercher...">
+
+    <div class="buttons">
+      <button id="randomBtn">🎲</button>
+      <button id="loginBtn">Login</button>
+      <button id="withiaBtn">Section IA</button>
+      <button id="addBtn" style="display:none;">➕</button>
     </div>
+  </div>
+</header>
 
+<main id="gallery">
 
-    </header>
-    <main id="gallery">
-
-
-        <img src="" alt=""
+	        <img src="" alt=""
         data-tags="">
 
         <img src="" alt=""
@@ -95,36 +94,19 @@
         <img src="https://zerostorage.net/api/files/download/a01e2f2a-b274-44c6-bf05-492c59501700" alt="Denji en femme"
         data-tags="Denji Csm Chainsaw Man trans tomeboy sexy">
 
-        </main>
-    <div id="viewer">
-    <img id="viewerImg">
+
+</main>
+
+<div id="viewer">
+  <img id="viewerImg">
 </div>
 
-    <script src="script.js"></script>
-   <footer>
-  <p>
-    Site créé par <span class="name">Mikudrien</span>
-    ,
-    <span class="name">Taiko</span>,
-    <span class="name">Tigrou</span>,
-    <span class="name">Rocket</span>
-    <h6 style="text-align: center;">Cette section du site ne contient pas de contenu IA !</h6>
-  </p>
+<footer>
+  <p>Site créé par <span class="name">Mikudrien</span> & co</p>
 </footer>
-<script>
-const supabaseClient = supabase.createClient(
-  "https://waljqaxkbvzidkrzbcbz.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw"
-);
 
-supabaseClient.auth.getUser().then(({ data }) => {
-  if (data.user) {
-    console.log("Connecté :", data.user.email);
-  } else {
-    console.log("Pas connecté");
-  }
-});
-</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
