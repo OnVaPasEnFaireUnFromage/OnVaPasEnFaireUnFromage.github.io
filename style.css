@@ -233,3 +233,23 @@ header {
 header.hide {
   transform: translateY(-80%);
 }
+
+#viewer{
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.9);
+  z-index:9999;
+}
+#viewer img{
+  max-width:95vw;
+  max-height:95vh;
+  object-fit:contain;
+  border-radius:8px;
+}
+header.hide{
+  transform: translateY(-70px);
+  transition: transform .2s ease;
+}
