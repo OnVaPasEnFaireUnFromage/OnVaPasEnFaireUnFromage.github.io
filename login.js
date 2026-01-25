@@ -30,23 +30,37 @@ function setLoading(state) {
 
 loginBtn.onclick = async () => {
   console.log("CLICK LOGIN");
+
   if (!email.value || !password.value) {
     showMsg("Champs manquants", "err");
     return;
   }
 
   setLoading(true);
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email.value,
+
+  const { data, error } = await sb.auth.signInWithPassword({
+    email: email.value.trim(),
     password: password.value
   });
+
   setLoading(false);
 
-  if (error) showMsg(error.message, "err");
-  else {
-    showMsg("Connecté", "ok");
-    setTimeout(() => location.href = "index.html", 700);
+  console.log("LOGIN data:", data);
+  console.log("LOGIN error:", error);
+
+  if (error) {
+    showMsg(error.message, "err");
+    return;
   }
+
+  const { data: sessionData } = await sb.auth.getSession();
+  console.log("SESSION:", sessionData.session);
+
+  showMsg("Connecté ✅", "ok");
+
+  setTimeout(() => {
+    location.href = "withoutia.html"; // mets la page qui existe chez toi
+  }, 700);
 };
 
 signupBtn.onclick = async () => {
