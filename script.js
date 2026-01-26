@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
   if (!window.supabase) {
-    console.error("Supabase SDK non chargé (CDN manquant avant script.js)");
+    console.error("Supabase SDK non chargé. Vérifie le CDN avant script.js");
     return;
   }
 
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const search = document.getElementById("search");
   const randomBtn = document.getElementById("randomBtn");
-  const loginBtn = document.getElementById("loginBtn");
   const withiaBtn = document.getElementById("withiaBtn");
   const withoutiaBtn = document.getElementById("withoutiaBtn");
   const addBtn = document.getElementById("addBtn");
@@ -60,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // VIEWER (click image)
+  // VIEWER
   if (gallery) {
     gallery.addEventListener("click", (e) => {
       const img = e.target.closest("img");
@@ -88,44 +87,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // AUTH UI (Login -> Compte) + ROLE (➕)
-  function resetLoginButton() {
-    if (!loginBtn) return null;
-    const clone = loginBtn.cloneNode(true);
-    loginBtn.replaceWith(clone);
+  // 🔥 reset safe: on prend le bouton ACTUEL dans le DOM à chaque fois
+  function resetLoginButtonSafe() {
+    const current = document.getElementById("loginBtn");
+    if (!current) return null;
+    const clone = current.cloneNode(true);
+    current.replaceWith(clone);
     return document.getElementById("loginBtn");
   }
 
   async function updateUI() {
-    const freshLoginBtn = resetLoginButton();
-    if (!freshLoginBtn) return;
+    const loginBtnFresh = resetLoginButtonSafe();
+    if (!loginBtnFresh) return;
 
-    const { data: { session } } = await sb.auth.getSession();
+    // default
+    if (addBtn) addBtn.style.display = "none";
 
-    // pas connecté
+    const { data: { session }, error } = await sb.auth.getSession();
+    if (error) console.error("getSession error:", error);
+
     if (!session || !session.user) {
-      freshLoginBtn.textContent = "Login";
-      freshLoginBtn.addEventListener("click", () => location.href = "login.html");
-      if (addBtn) addBtn.style.display = "none";
+      loginBtnFresh.textContent = "Login";
+      loginBtnFresh.addEventListener("click", () => location.href = "login.html");
       return;
     }
 
-    // connecté
-    freshLoginBtn.textContent = "Compte";
-    freshLoginBtn.addEventListener("click", () => location.href = "account.html");
+    loginBtnFresh.textContent = "Compte";
+    loginBtnFresh.addEventListener("click", () => location.href = "account.html");
 
-    // role => bouton ➕
+    // role => show ➕
     if (!addBtn) return;
-    addBtn.style.display = "none";
 
-    const { data: profile, error } = await sb
+    const { data: profile, error: roleErr } = await sb
       .from("profiles")
       .select("role")
       .eq("id", session.user.id)
       .single();
 
-    if (error) {
-      console.error("profiles error:", error);
+    if (roleErr) {
+      console.error("profiles error:", roleErr);
       return;
     }
 
