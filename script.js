@@ -3,23 +3,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
   if (!window.supabase) {
-    console.error("Supabase SDK non chargé. Vérifie le CDN avant script.js");
+    console.error("Supabase SDK non chargé (le CDN n'est pas chargé)");
     return;
   }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const topbar = document.querySelector(".topbar");
   const search = document.getElementById("search");
   const randomBtn = document.getElementById("randomBtn");
+  const loginBtn = document.getElementById("loginBtn");
   const withiaBtn = document.getElementById("withiaBtn");
-  const withoutiaBtn = document.getElementById("withoutiaBtn");
   const addBtn = document.getElementById("addBtn");
 
+  const gallery = document.getElementById("gallery");
   const viewer = document.getElementById("viewer");
   const viewerImg = document.getElementById("viewerImg");
-  const gallery = document.getElementById("gallery");
-
-  const header = document.querySelector("header");
 
   function getImages() {
     return Array.from(document.querySelectorAll("#gallery img"));
@@ -29,12 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!viewer || !viewerImg) return;
     viewerImg.src = src;
     viewer.style.display = "flex";
+    viewer.setAttribute("aria-hidden", "false");
   }
 
   function closeViewer() {
     if (!viewer || !viewerImg) return;
     viewer.style.display = "none";
     viewerImg.src = "";
+    viewer.setAttribute("aria-hidden", "true");
   }
 
   // SEARCH
@@ -43,7 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const words = search.value.toLowerCase().trim().split(" ").filter(Boolean);
       getImages().forEach(img => {
         const tags = (img.dataset.tags || "").toLowerCase();
-        img.style.display = words.every(w => tags.includes(w)) ? "block" : "none";
+        const ok = words.every(w => tags.includes(w));
+        img.style.display = ok ? "block" : "none";
       });
     });
   }
@@ -59,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // VIEWER
+  // VIEWER (delegation)
   if (gallery) {
     gallery.addEventListener("click", (e) => {
       const img = e.target.closest("img");
@@ -73,67 +75,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NAV
   if (withiaBtn) withiaBtn.addEventListener("click", () => location.href = "withia.html");
-  if (withoutiaBtn) withoutiaBtn.addEventListener("click", () => location.href = "withoutia.html");
-  if (addBtn) addBtn.addEventListener("click", () => location.href = "upload.html");
 
   // HEADER hide on scroll
-  if (header) {
+  if (topbar) {
     let lastScroll = 0;
     window.addEventListener("scroll", () => {
-      const currentScroll = window.scrollY;
-      if (currentScroll > lastScroll && currentScroll > 100) header.classList.add("hide");
-      else header.classList.remove("hide");
-      lastScroll = currentScroll;
+      const current = window.scrollY;
+      if (current > lastScroll && current > 100) topbar.classList.add("hide");
+      else topbar.classList.remove("hide");
+      lastScroll = current;
     });
   }
 
-  // 🔥 reset safe: on prend le bouton ACTUEL dans le DOM à chaque fois
-  function resetLoginButtonSafe() {
-    const current = document.getElementById("loginBtn");
-    if (!current) return null;
-    const clone = current.cloneNode(true);
-    current.replaceWith(clone);
-    return document.getElementById("loginBtn");
+  // AUTH+ROLE (SIMPLE : un seul handler, on change juste la cible)
+  let loginTarget = "login.html";
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      location.href = loginTarget;
+    });
   }
 
-  async function updateUI() {
-    const loginBtnFresh = resetLoginButtonSafe();
-    if (!loginBtnFresh) return;
+  if (addBtn) {
+    addBtn.style.display = "none";
+    addBtn.addEventListener("click", () => location.href = "upload.html");
+  }
 
-    // default
-    if (addBtn) addBtn.style.display = "none";
-
-    const { data: { session }, error } = await sb.auth.getSession();
-    if (error) console.error("getSession error:", error);
+  async function refreshAuthUI() {
+    const { data: { session } } = await sb.auth.getSession();
 
     if (!session || !session.user) {
-      loginBtnFresh.textContent = "Login";
-      loginBtnFresh.addEventListener("click", () => location.href = "login.html");
+      if (loginBtn) loginBtn.textContent = "Login";
+      loginTarget = "login.html";
+      if (addBtn) addBtn.style.display = "none";
       return;
     }
 
-    loginBtnFresh.textContent = "Compte";
-    loginBtnFresh.addEventListener("click", () => location.href = "account.html");
+    if (loginBtn) loginBtn.textContent = "Compte";
+    loginTarget = "account.html";
 
-    // role => show ➕
     if (!addBtn) return;
+    addBtn.style.display = "none";
 
-    const { data: profile, error: roleErr } = await sb
+    const { data: profile, error } = await sb
       .from("profiles")
       .select("role")
       .eq("id", session.user.id)
       .single();
 
-    if (roleErr) {
-      console.error("profiles error:", roleErr);
+    if (error) {
+      console.error("profiles error:", error);
       return;
     }
 
     if (profile && (profile.role === "admin" || profile.role === "contributor")) {
-      addBtn.style.display = "block";
+      addBtn.style.display = "inline-flex";
     }
   }
 
-  updateUI();
-  sb.auth.onAuthStateChange(() => updateUI());
+  refreshAuthUI();
+  sb.auth.onAuthStateChange(() => refreshAuthUI());
 });

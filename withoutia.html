@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Goon Multiverse</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header>
-  <h3><a href="withoutia.html">Goon Multiverse 🔥</a></h3>
+<header class="topbar">
+  <h3 class="brand">
+    <a href="withoutia.html">Goon Multiverse 🔥</a>
+  </h3>
 
-  <div class="search-box">
-    <input type="text" id="search" placeholder="Rechercher...">
+  <input type="text" id="search" class="search" placeholder="Rechercher..." />
 
-    <div class="buttons">
-      <button id="randomBtn" type="button">🎲</button>
-      <button id="loginBtn" type="button">Login</button>
-      <button id="withiaBtn" type="button">Section IA</button>
-      <button id="addBtn" type="button" style="display:none;">➕</button>
-    </div>
+  <div class="btnrow">
+    <button id="randomBtn" type="button">🎲</button>
+    <button id="loginBtn" type="button">Login</button>
+    <button id="withiaBtn" type="button">Section IA</button>
+    <button id="addBtn" type="button" style="display:none;">➕</button>
   </div>
 </header>
 
-<main id="gallery">
-
-  <img src="" alt=""
-        data-tags="">
-
+<main id="gallery" class="gallery">
+  
         <img src="https://zerostorage.net/api/files/download/e3e3e512-69f7-427c-bac1-64001d92def0" alt="Malegna qui attend de se faire enculer avec sa pote"
         data-tags="Elden Ring Malegna armure chatte cul anal rousse seins quatre pattes">
 
@@ -85,18 +82,20 @@
 
 </main>
 
-<div id="viewer">
-  <img id="viewerImg">
+</main>
+
+<div id="viewer" class="viewer" aria-hidden="true">
+  <img id="viewerImg" alt="">
 </div>
 
-<footer>
+<footer class="footer">
   <p>
     Site créé par <span class="name">Mikudrien</span>,
     <span class="name">Taiko</span>,
     <span class="name">Tigrou</span>,
     <span class="name">Rocket</span>
   </p>
-  <h6 style="text-align:center;">Cette section du site ne contient pas de contenu IA !</h6>
+  <h6>Cette section du site ne contient pas de contenu IA !</h6>
 </footer>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
