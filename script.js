@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
-  const SUPABASE_ANON_KEY = "TON_ANON_KEY_ICI"; // garde la tienne
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
   if (!window.supabase) {
-    console.error("Supabase SDK pas chargé (CDN manquant).");
+    console.error("Supabase SDK non chargé (le CDN n'est pas chargé)");
     return;
   }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const topbar = document.querySelector(".topbar");
   const search = document.getElementById("search");
   const randomBtn = document.getElementById("randomBtn");
   const loginBtn = document.getElementById("loginBtn");
   const withiaBtn = document.getElementById("withiaBtn");
-  const withoutiaBtn = document.getElementById("withoutiaBtn");
   const addBtn = document.getElementById("addBtn");
 
   const gallery = document.getElementById("gallery");
@@ -38,17 +38,19 @@ document.addEventListener("DOMContentLoaded", () => {
     viewer.setAttribute("aria-hidden", "true");
   }
 
+  // SEARCH
   if (search) {
     search.addEventListener("input", () => {
-      const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const words = search.value.toLowerCase().trim().split(" ").filter(Boolean);
       getImages().forEach(img => {
         const tags = (img.dataset.tags || "").toLowerCase();
         const ok = words.every(w => tags.includes(w));
-        img.style.display = ok ? "" : "none";
+        img.style.display = ok ? "block" : "none";
       });
     });
   }
 
+  // RANDOM
   if (randomBtn) {
     randomBtn.addEventListener("click", () => {
       const imgs = getImages().filter(i => i.style.display !== "none");
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // VIEWER (delegation)
   if (gallery) {
     gallery.addEventListener("click", (e) => {
       const img = e.target.closest("img");
@@ -68,18 +71,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (viewer) viewer.addEventListener("click", closeViewer);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeViewer();
-  });
+  document.addEventListener("keydown", (e) => e.key === "Escape" && closeViewer());
 
+  // NAV
   if (withiaBtn) withiaBtn.addEventListener("click", () => location.href = "withia.html");
-  if (withoutiaBtn) withoutiaBtn.addEventListener("click", () => location.href = "withoutia.html");
 
-  if (addBtn) {
-    addBtn.style.display = "none";
-    addBtn.addEventListener("click", () => location.href = "upload.html");
+  // HEADER hide on scroll
+  if (topbar) {
+    let lastScroll = 0;
+    window.addEventListener("scroll", () => {
+      const current = window.scrollY;
+      if (current > lastScroll && current > 100) topbar.classList.add("hide");
+      else topbar.classList.remove("hide");
+      lastScroll = current;
+    });
   }
 
+  // AUTH+ROLE (SIMPLE : un seul handler, on change juste la cible)
   let loginTarget = "login.html";
 
   if (loginBtn) {
@@ -88,9 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (addBtn) {
+    addBtn.style.display = "none";
+    addBtn.addEventListener("click", () => location.href = "upload.html");
+  }
+
   async function refreshAuthUI() {
-    const { data: { session }, error } = await sb.auth.getSession();
-    if (error) console.error("getSession error:", error);
+    const { data: { session } } = await sb.auth.getSession();
 
     if (!session || !session.user) {
       if (loginBtn) loginBtn.textContent = "Login";
@@ -105,14 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!addBtn) return;
     addBtn.style.display = "none";
 
-    const { data: profile, error: roleErr } = await sb
+    const { data: profile, error } = await sb
       .from("profiles")
       .select("role")
       .eq("id", session.user.id)
       .single();
 
-    if (roleErr) {
-      console.error("profiles error:", roleErr);
+    if (error) {
+      console.error("profiles error:", error);
       return;
     }
 
