@@ -3,17 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
   if (!window.supabase) {
-    console.error("Supabase SDK non chargé (le CDN n'est pas chargé)");
+    console.error("Supabase SDK non chargé (CDN manquant avant script.js)");
     return;
   }
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const topbar = document.querySelector(".topbar");
+  const topbar = document.querySelector(".topbar") || document.querySelector("header");
   const search = document.getElementById("search");
   const randomBtn = document.getElementById("randomBtn");
   const loginBtn = document.getElementById("loginBtn");
   const withiaBtn = document.getElementById("withiaBtn");
+  const withoutiaBtn = document.getElementById("withoutiaBtn");
   const addBtn = document.getElementById("addBtn");
 
   const gallery = document.getElementById("gallery");
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // SEARCH
   if (search) {
     search.addEventListener("input", () => {
-      const words = search.value.toLowerCase().trim().split(" ").filter(Boolean);
+      const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
       getImages().forEach(img => {
         const tags = (img.dataset.tags || "").toLowerCase();
         const ok = words.every(w => tags.includes(w));
@@ -75,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NAV
   if (withiaBtn) withiaBtn.addEventListener("click", () => location.href = "withia.html");
+  if (withoutiaBtn) withoutiaBtn.addEventListener("click", () => location.href = "withoutia.html");
 
   // HEADER hide on scroll
   if (topbar) {
@@ -87,33 +89,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // AUTH+ROLE (SIMPLE : un seul handler, on change juste la cible)
-  let loginTarget = "login.html";
-
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      location.href = loginTarget;
-    });
-  }
-
+  // Upload btn
   if (addBtn) {
     addBtn.style.display = "none";
     addBtn.addEventListener("click", () => location.href = "upload.html");
+  }
+
+  // 🔐 AUTH UI
+  // -> le bouton s'appelle TOUJOURS "Login"
+  // -> mais il redirige soit vers login.html soit vers account.html
+  let loginTarget = "login.html";
+
+  if (loginBtn) {
+    loginBtn.textContent = "Login";
+    loginBtn.addEventListener("click", () => location.href = loginTarget);
   }
 
   async function refreshAuthUI() {
     const { data: { session } } = await sb.auth.getSession();
 
     if (!session || !session.user) {
-      if (loginBtn) loginBtn.textContent = "Login";
       loginTarget = "login.html";
       if (addBtn) addBtn.style.display = "none";
       return;
     }
 
-    if (loginBtn) loginBtn.textContent = "Compte";
     loginTarget = "account.html";
 
+    // roles => show ➕
     if (!addBtn) return;
     addBtn.style.display = "none";
 
