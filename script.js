@@ -1,141 +1,89 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
+const search = document.getElementById("search");
+const randomBtn = document.getElementById("randomBtn");
+const viewer = document.getElementById("viewer");
+const viewerImg = document.getElementById("viewerImg");
 
-  if (!window.supabase) {
-    console.error("Supabase SDK non chargé (CDN manquant avant script.js)");
-    return;
-  }
+function getImages() {
+  return Array.from(document.querySelectorAll("#gallery img"));
+}
 
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const topbar = document.querySelector(".topbar") || document.querySelector("header");
-  const search = document.getElementById("search");
-  const randomBtn = document.getElementById("randomBtn");
-  const loginBtn = document.getElementById("loginBtn");
-  const withiaBtn = document.getElementById("withiaBtn");
-  const withoutiaBtn = document.getElementById("withoutiaBtn");
-  const addBtn = document.getElementById("addBtn");
+search.addEventListener("input", () => {
+  const value = search.value.toLowerCase().trim();
+  const words = value.split(" ").filter(w => w);
 
-  const gallery = document.getElementById("gallery");
-  const viewer = document.getElementById("viewer");
-  const viewerImg = document.getElementById("viewerImg");
+  getImages().forEach(img => {
+    const tags = img.dataset.tags.toLowerCase();
+    const match = words.every(word => tags.includes(word));
+    img.style.display = match ? "block" : "none";
+  });
+});
 
-  function getImages() {
-    return Array.from(document.querySelectorAll("#gallery img"));
-  }
+randomBtn.addEventListener("click", () => {
+  const visibleImages = getImages().filter(
+    img => img.style.display !== "none"
+  );
 
-  function openViewer(src) {
-    if (!viewer || !viewerImg) return;
-    viewerImg.src = src;
+  if (!visibleImages.length) return;
+
+  const img = visibleImages[
+    Math.floor(Math.random() * visibleImages.length)
+  ];
+
+  img.scrollIntoView({ behavior: "smooth", block: "center" });
+  viewerImg.src = img.src;
+  viewer.style.display = "flex";
+});
+
+getImages().forEach(img => {
+  img.addEventListener("click", () => {
+    viewerImg.src = img.src;
     viewer.style.display = "flex";
-    viewer.setAttribute("aria-hidden", "false");
-  }
+  });
+});
 
-  function closeViewer() {
-    if (!viewer || !viewerImg) return;
+
+viewer.addEventListener("click", () => {
+  viewer.style.display = "none";
+  viewerImg.src = "";
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
     viewer.style.display = "none";
     viewerImg.src = "";
-    viewer.setAttribute("aria-hidden", "true");
+  }
+});
+
+const loginBtn = document.getElementById("loginBtn");
+const withiaBtn = document.getElementById("withiaBtn");
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    window.location.href = "login.html";
+  });
+}
+
+if (withiaBtn) {
+  withiaBtn.addEventListener("click", () => {
+    window.location.href = "withia.html";
+  });
+}
+
+
+let lastScroll = 0;
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // scroll vers le bas
+    header.classList.add("hide");
+  } else {
+    // scroll vers le haut
+    header.classList.remove("hide");
   }
 
-  // SEARCH
-  if (search) {
-    search.addEventListener("input", () => {
-      const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
-      getImages().forEach(img => {
-        const tags = (img.dataset.tags || "").toLowerCase();
-        const ok = words.every(w => tags.includes(w));
-        img.style.display = ok ? "block" : "none";
-      });
-    });
-  }
-
-  // RANDOM
-  if (randomBtn) {
-    randomBtn.addEventListener("click", () => {
-      const imgs = getImages().filter(i => i.style.display !== "none");
-      if (!imgs.length) return;
-      const img = imgs[Math.floor(Math.random() * imgs.length)];
-      img.scrollIntoView({ behavior: "smooth", block: "center" });
-      openViewer(img.src);
-    });
-  }
-
-  // VIEWER (delegation)
-  if (gallery) {
-    gallery.addEventListener("click", (e) => {
-      const img = e.target.closest("img");
-      if (!img) return;
-      openViewer(img.src);
-    });
-  }
-
-  if (viewer) viewer.addEventListener("click", closeViewer);
-  document.addEventListener("keydown", (e) => e.key === "Escape" && closeViewer());
-
-  // NAV
-  if (withiaBtn) withiaBtn.addEventListener("click", () => location.href = "withia.html");
-  if (withoutiaBtn) withoutiaBtn.addEventListener("click", () => location.href = "withoutia.html");
-
-  // HEADER hide on scroll
-  if (topbar) {
-    let lastScroll = 0;
-    window.addEventListener("scroll", () => {
-      const current = window.scrollY;
-      if (current > lastScroll && current > 100) topbar.classList.add("hide");
-      else topbar.classList.remove("hide");
-      lastScroll = current;
-    });
-  }
-
-  // Upload btn
-  if (addBtn) {
-    addBtn.style.display = "none";
-    addBtn.addEventListener("click", () => location.href = "upload.html");
-  }
-
-  // 🔐 AUTH UI
-  // -> le bouton s'appelle TOUJOURS "Login"
-  // -> mais il redirige soit vers login.html soit vers account.html
-  let loginTarget = "login.html";
-
-  if (loginBtn) {
-    loginBtn.textContent = "Login";
-    loginBtn.addEventListener("click", () => location.href = loginTarget);
-  }
-
-  async function refreshAuthUI() {
-    const { data: { session } } = await sb.auth.getSession();
-
-    if (!session || !session.user) {
-      loginTarget = "login.html";
-      if (addBtn) addBtn.style.display = "none";
-      return;
-    }
-
-    loginTarget = "account.html";
-
-    // roles => show ➕
-    if (!addBtn) return;
-    addBtn.style.display = "none";
-
-    const { data: profile, error } = await sb
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    if (error) {
-      console.error("profiles error:", error);
-      return;
-    }
-
-    if (profile && (profile.role === "admin" || profile.role === "contributor")) {
-      addBtn.style.display = "inline-flex";
-    }
-  }
-
-  refreshAuthUI();
-  sb.auth.onAuthStateChange(() => refreshAuthUI());
+  lastScroll = currentScroll;
 });
