@@ -1,101 +1,89 @@
-const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
+const search = document.getElementById("search");
+const randomBtn = document.getElementById("randomBtn");
+const viewer = document.getElementById("viewer");
+const viewerImg = document.getElementById("viewerImg");
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+function getImages() {
+  return Array.from(document.querySelectorAll("#gallery img"));
+}
 
-const email = document.getElementById("email");
-const password = document.getElementById("password");
+
+search.addEventListener("input", () => {
+  const value = search.value.toLowerCase().trim();
+  const words = value.split(" ").filter(w => w);
+
+  getImages().forEach(img => {
+    const tags = img.dataset.tags.toLowerCase();
+    const match = words.every(word => tags.includes(word));
+    img.style.display = match ? "block" : "none";
+  });
+});
+
+randomBtn.addEventListener("click", () => {
+  const visibleImages = getImages().filter(
+    img => img.style.display !== "none"
+  );
+
+  if (!visibleImages.length) return;
+
+  const img = visibleImages[
+    Math.floor(Math.random() * visibleImages.length)
+  ];
+
+  img.scrollIntoView({ behavior: "smooth", block: "center" });
+  viewerImg.src = img.src;
+  viewer.style.display = "flex";
+});
+
+getImages().forEach(img => {
+  img.addEventListener("click", () => {
+    viewerImg.src = img.src;
+    viewer.style.display = "flex";
+  });
+});
+
+
+viewer.addEventListener("click", () => {
+  viewer.style.display = "none";
+  viewerImg.src = "";
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    viewer.style.display = "none";
+    viewerImg.src = "";
+  }
+});
+
 const loginBtn = document.getElementById("loginBtn");
-const signupBtn = document.getElementById("signupBtn");
-const forgotBtn = document.getElementById("forgot");
-const msg = document.getElementById("msg");
+const withiaBtn = document.getElementById("withiaBtn");
 
-function showMsg(text, type) {
-  msg.className = type;
-  msg.textContent = text;
-  msg.style.display = "block";
-}
-
-function setLoading(state) {
-  loginBtn.disabled = state;
-  signupBtn.disabled = state;
-}
-
-async function ensureProfileRow(user) {
-  try {
-    const { data: existing, error } = await sb
-      .from("profiles")
-      .select("id")
-      .eq("id", user.id)
-      .maybeSingle();
-
-    if (!error && existing) return;
-
-    await sb.from("profiles").insert({ id: user.id, role: "user" });
-  } catch {
-    // si RLS empêche, pas grave
-  }
-}
-
-loginBtn.onclick = async () => {
-  if (!email.value || !password.value) {
-    showMsg("Champs manquants", "err");
-    return;
-  }
-
-  setLoading(true);
-
-  const { data, error } = await sb.auth.signInWithPassword({
-    email: email.value.trim(),
-    password: password.value
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    window.location.href = "login.html";
   });
+}
 
-  setLoading(false);
-
-  if (error) {
-    showMsg(error.message, "err");
-    return;
-  }
-
-  if (data?.user) await ensureProfileRow(data.user);
-
-  showMsg("Connecté ✅", "ok");
-  setTimeout(() => (location.href = "withoutia.html"), 500);
-};
-
-signupBtn.onclick = async () => {
-  if (!email.value || !password.value) {
-    showMsg("Champs manquants", "err");
-    return;
-  }
-
-  setLoading(true);
-
-  const { data, error } = await sb.auth.signUp({
-    email: email.value.trim(),
-    password: password.value
+if (withiaBtn) {
+  withiaBtn.addEventListener("click", () => {
+    window.location.href = "withia.html";
   });
+}
 
-  setLoading(false);
 
-  if (error) {
-    showMsg(error.message, "err");
-    return;
+let lastScroll = 0;
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // scroll vers le bas
+    header.classList.add("hide");
+  } else {
+    // scroll vers le haut
+    header.classList.remove("hide");
   }
 
-  if (data?.user) await ensureProfileRow(data.user);
-
-  showMsg("Compte créé ✅", "ok");
-};
-
-forgotBtn.onclick = async (e) => {
-  e.preventDefault();
-  if (!email.value) {
-    showMsg("Entre ton email", "err");
-    return;
-  }
-
-  const { error } = await sb.auth.resetPasswordForEmail(email.value.trim());
-  if (error) showMsg(error.message, "err");
-  else showMsg("Email envoyé ✅", "ok");
-};
+  lastScroll = currentScroll;
+});
