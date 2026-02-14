@@ -1,10 +1,11 @@
 const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+if (!window.supabase) {
+  console.error("Supabase SDK pas chargé (CDN manquant).");
+}
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const email = document.getElementById("email");
 const password = document.getElementById("password");
@@ -24,6 +25,7 @@ function setLoading(state) {
   signupBtn.disabled = state;
 }
 
+/* ✅ LOGIN */
 loginBtn.onclick = async () => {
   if (!email.value || !password.value) {
     showMsg("Champs manquants", "err");
@@ -31,19 +33,24 @@ loginBtn.onclick = async () => {
   }
 
   setLoading(true);
-  const { error } = await supabase.auth.signInWithPassword({
-    email: email.value,
+
+  const { data, error } = await sb.auth.signInWithPassword({
+    email: email.value.trim(),
     password: password.value
   });
+
   setLoading(false);
 
-  if (error) showMsg(error.message, "err");
-  else {
-    showMsg("Connecté", "ok");
-    setTimeout(() => location.href = "index.html", 700);
+  if (error) {
+    showMsg(error.message, "err");
+    return;
   }
+
+  showMsg("Connecté ✅", "ok");
+  setTimeout(() => (location.href = "withoutia.html"), 500);
 };
 
+/* ✅ SIGNUP */
 signupBtn.onclick = async () => {
   if (!email.value || !password.value) {
     showMsg("Champs manquants", "err");
@@ -51,24 +58,39 @@ signupBtn.onclick = async () => {
   }
 
   setLoading(true);
-  const { error } = await supabase.auth.signUp({
-    email: email.value,
+
+  const { data, error } = await sb.auth.signUp({
+    email: email.value.trim(),
     password: password.value
   });
+
   setLoading(false);
 
-  if (error) showMsg(error.message, "err");
-  else showMsg("Compte créé, vérifie tes mails", "ok");
+  if (error) {
+    showMsg(error.message, "err");
+    return;
+  }
+
+  // si email confirmation ON, session = null
+  if (!data.session) {
+    showMsg("Compte créé ✅ (si la confirmation email est activée, check tes mails)", "ok");
+    return;
+  }
+
+  showMsg("Compte créé + connecté ✅", "ok");
+  setTimeout(() => (location.href = "withoutia.html"), 700);
 };
 
-forgotBtn.onclick = async e => {
+/* ✅ FORGOT PASSWORD */
+forgotBtn.onclick = async (e) => {
   e.preventDefault();
+
   if (!email.value) {
     showMsg("Entre ton email", "err");
     return;
   }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email.value);
+  const { error } = await sb.auth.resetPasswordForEmail(email.value.trim());
   if (error) showMsg(error.message, "err");
-  else showMsg("Email envoyé", "ok");
+  else showMsg("Email envoyé ✅", "ok");
 };
