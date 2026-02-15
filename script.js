@@ -96,11 +96,11 @@ if (addBtn) {
 
   addBtn.addEventListener("click", async () => {
     // si ton client s'appelle pas "sb", change ici
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
 
     // pas connecté -> page connecte toi
     if (!session?.user) {
-      window.location.href = "connectetoi.html";
+      window.location.href = "cotoi.html";
       return;
     }
 
