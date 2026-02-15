@@ -109,20 +109,8 @@
     <h6 style="text-align: center;">Cette section du site ne contient pas de contenu IA !</h6>
   </p>
 </footer>
-<script>
-const supabaseClient = supabase.createClient(
-  "https://waljqaxkbvzidkrzbcbz.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw"
-);
-
-supabaseClient.auth.getUser().then(({ data }) => {
-  if (data.user) {
-    console.log("Connecté :", data.user.email);
-  } else {
-    console.log("Pas connecté");
-  }
-});
-</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
