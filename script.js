@@ -87,3 +87,45 @@ window.addEventListener("scroll", () => {
 
   lastScroll = currentScroll;
 });
+
+// ➕ toujours visible, et redirections au clic
+const addBtn = document.getElementById("addBtn");
+
+if (addBtn) {
+  addBtn.style.display = "inline-flex"; // toujours visible
+
+  addBtn.addEventListener("click", async () => {
+    // si ton client s'appelle pas "sb", change ici
+    const { data: { session } } = await sb.auth.getSession();
+
+    // pas connecté -> page connecte toi
+    if (!session?.user) {
+      window.location.href = "connectetoi.html";
+      return;
+    }
+
+    // connecté -> check role
+    const { data: profile, error } = await sb
+      .from("profiles")
+      .select("role")
+      .eq("id", session.user.id)
+      .single();
+
+    if (error) {
+      console.error("profiles error:", error);
+      window.location.href = "paslesperms.html";
+      return;
+    }
+
+    const role = profile?.role || "user";
+    const allowed = (role === "admin" || role === "contributor");
+
+    if (!allowed) {
+      window.location.href = "paslesperms.html";
+      return;
+    }
+
+    // autorisé
+    window.location.href = "upload.html";
+  });
+}
