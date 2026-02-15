@@ -1,53 +1,52 @@
 const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
-const SUPABASE_ANON_KEY = "TA_ANON_KEY";
+const SUPABASE_ANON_KEY = "TA_ANON_KEY"; // garde la tienne
 
-const sb = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const imgUrl = document.getElementById("imgUrl");
-const tags = document.getElementById("tags");
-const desc = document.getElementById("desc");
+const urlInput = document.getElementById("imgUrl");
+const tagsInput = document.getElementById("imgTags");
 const uploadBtn = document.getElementById("uploadBtn");
 const msg = document.getElementById("msg");
 
-function showMsg(text, color="white"){
+function show(text, color = "white") {
   msg.textContent = text;
   msg.style.color = color;
 }
 
-uploadBtn.onclick = async () => {
+uploadBtn.addEventListener("click", async () => {
+  const url = urlInput.value.trim();
+  const tags = tagsInput.value.trim();
 
-  if(!imgUrl.value){
-    showMsg("URL manquante","red");
+  if (!url || !tags) {
+    show("Champs manquants", "red");
     return;
   }
 
-  const { data: { session } } = await sb.auth.getSession();
+  // 1) session ?
+  const { data: sessData, error: sessErr } = await sb.auth.getSession();
+  console.log("SESSION:", sessData, sessErr);
 
-  if(!session){
-    location.href = "connectetoi.html";
+  if (!sessData?.session) {
+    show("Pas connecté → redirection", "orange");
+    setTimeout(() => (location.href = "login.html"), 500);
     return;
   }
 
-  const { error } = await sb
-    .from("images")
-    .insert({
-      url: imgUrl.value,
-      tags: tags.value,
-      description: desc.value,
-      user_id: session.user.id
-    });
+  // 2) insert
+  const payload = { url, tags };
+  console.log("INSERT payload:", payload);
 
-  if(error){
-    showMsg("Erreur upload","red");
-    console.error(error);
-  }else{
-    showMsg("Image publiée ✅","lime");
-    imgUrl.value="";
-    tags.value="";
-    desc.value="";
+  const { data, error } = await sb.from("images").insert(payload).select();
+
+  console.log("INSERT data:", data);
+  console.log("INSERT error:", error);
+
+  if (error) {
+    show("Erreur upload: " + (error.message || "inconnue"), "red");
+    return;
   }
 
-};
+  show("Posté ✅", "lime");
+  urlInput.value = "";
+  tagsInput.value = "";
+});
