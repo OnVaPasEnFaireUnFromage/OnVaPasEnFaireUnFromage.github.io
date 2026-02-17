@@ -130,28 +130,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
   // ====== HEADER HIDE ON SCROLL ======
-  const header = document.querySelector("header");
-  if (header) {
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+  let lastScroll = 0;
+const header = document.querySelector("header");
 
-    const updateHeader = () => {
-      const current = window.scrollY;
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
 
-      if (current > lastScrollY && current > 120) {
-        header.classList.add("hide");   // scroll down
-      } else {
-        header.classList.remove("hide"); // scroll up
-      }
-
-      lastScrollY = current;
-      ticking = false;
-    };
-
-    window.addEventListener("scroll", () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateHeader);
-        ticking = true;
-      }
-    }, { passive: true });
+  // Si on descend → cache
+  if (currentScroll > lastScroll && currentScroll > 80) {
+    header.classList.add("hide");
+  } 
+  
+  // Si on remonte → affiche DIRECT
+  else {
+    header.classList.remove("hide");
   }
+
+  lastScroll = currentScroll;
+});
