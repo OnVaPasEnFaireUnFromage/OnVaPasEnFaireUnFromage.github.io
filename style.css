@@ -126,13 +126,14 @@ button:active{
 /* thumbnails style (rule34-like) */
 #gallery img{
   width:100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+  height:auto;
+  object-fit: contain;
   border-radius: 6px;
   cursor:pointer;
   background:#0b0b0c;
   border: 1px solid rgba(255,255,255,.06);
 }
+
 
 #gallery img:hover{
   border-color: rgba(255,255,255,.16);
