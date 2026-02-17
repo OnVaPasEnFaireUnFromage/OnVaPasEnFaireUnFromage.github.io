@@ -126,25 +126,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+    // ====== HEADER HIDE ON SCROLL (FIX) ======
+  const header = document.querySelector("header");
+  if (header) {
+    let lastScroll = window.scrollY;
+
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.scrollY;
+
+      // descend -> cache
+      if (currentScroll > lastScroll && currentScroll > 80) {
+        header.classList.add("hide");
+      }
+
+      // remonte -> montre direct
+      if (currentScroll < lastScroll) {
+        header.classList.remove("hide");
+      }
+
+      // tout en haut -> montre toujours
+      if (currentScroll <= 5) {
+        header.classList.remove("hide");
+      }
+
+      lastScroll = currentScroll;
+    }, { passive: true });
+  }
+
+
   console.log("✅ script.js OK (no redeclare, Supabase OK)");
 });
 
-  // ====== HEADER HIDE ON SCROLL ======
-  let lastScroll = 0;
-const header = document.querySelector("header");
-
-window.addEventListener("scroll", () => {
-  const currentScroll = window.scrollY;
-
-  // Si on descend → cache
-  if (currentScroll > lastScroll && currentScroll > 80) {
-    header.classList.add("hide");
-  } 
-  
-  // Si on remonte → affiche DIRECT
-  else {
-    header.classList.remove("hide");
-  }
-
-  lastScroll = currentScroll;
-});
