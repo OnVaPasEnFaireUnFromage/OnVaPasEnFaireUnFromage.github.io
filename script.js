@@ -128,3 +128,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("✅ script.js OK (no redeclare, Supabase OK)");
 });
+
+  // ====== HEADER HIDE ON SCROLL ======
+  const header = document.querySelector("header");
+  if (header) {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    const updateHeader = () => {
+      const current = window.scrollY;
+
+      if (current > lastScrollY && current > 120) {
+        header.classList.add("hide");   // scroll down
+      } else {
+        header.classList.remove("hide"); // scroll up
+      }
+
+      lastScrollY = current;
+      ticking = false;
+    };
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeader);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
