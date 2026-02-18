@@ -85,6 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  if (withoutiaBtn) {
+    withoutiaBtn.addEventListener("click", () => { 
+      location.href = "withoutia.html";
+    });
+  }
+
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
       location.href = "login.html";
