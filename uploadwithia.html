@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload — IA</title>
+  <link rel="stylesheet" href="upload.css">
+</head>
+<body>
+
+<header>
+  <h3><a href="withia.html">Goon Multiverse IA 🔥</a></h3>
+</header>
+
+<main class="page">
+  <h2>Upload — IA</h2>
+
+  <div class="card">
+    <label>URL de l'image</label>
+    <input id="url" type="text" placeholder="https://..." />
+
+    <label>Tags</label>
+    <input id="tags" type="text" placeholder="shinobu ..." />
+
+    <label>Description</label>
+    <textarea id="description" placeholder="..."></textarea>
+
+    <button id="publishBtn">Publier</button>
+    <div id="msg"></div>
+  </div>
+</main>
+
+<script>const SECTION = "withia";</script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="uploadwithia.js"></script>
+
+</body>
+</html>
