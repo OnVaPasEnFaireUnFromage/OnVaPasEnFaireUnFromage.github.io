@@ -135,37 +135,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ====== HEADER HIDE ON SCROLL (STABLE) ======
+  // ====== HEADER HIDE ON SCROLL (BÉTON) ======
   const header = document.querySelector("header");
   if (header) {
-    let lastScroll = window.scrollY;
+    let last = window.scrollY;
     let hidden = false;
+    let ticking = false;
 
-    window.addEventListener("scroll", () => {
-      const current = window.scrollY;
-      const diff = current - lastScroll;
+    const run = () => {
+      const y = window.scrollY;
+      const goingDown = y > last;
+      const goingUp = y < last;
 
-      // descend -> cache après un seuil
-      if (diff > 6 && current > 80 && !hidden) {
+      if (y <= 5) {
+        header.classList.remove("hide");
+        hidden = false;
+      } else if (goingDown && y > 80 && !hidden) {
         header.classList.add("hide");
         hidden = true;
-      }
-
-      // remonte -> affiche direct
-      if (diff < -6 && hidden) {
+      } else if (goingUp && hidden) {
         header.classList.remove("hide");
         hidden = false;
       }
 
-      // tout en haut -> toujours visible
-      if (current <= 5) {
-        header.classList.remove("hide");
-        hidden = false;
-      }
+      last = y;
+      ticking = false;
+    };
 
-      lastScroll = current;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(run);
+      }
     }, { passive: true });
   }
+
 
   console.log("✅ script.js OK");
 });
