@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (Btn) {
+  if (compteBtn) {
     compteBtn.addEventListener("click", () => {
       location.href = "login.html";
     });
