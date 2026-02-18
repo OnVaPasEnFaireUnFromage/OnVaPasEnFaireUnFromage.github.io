@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== ELEMENTS ======
   const searchEl = document.getElementById("search");
   const randomBtn = document.getElementById("randomBtn");
-  const loginBtn = document.getElementById("loginBtn");
+  const compteBtn = document.getElementById("compteBtn");
   const withiaBtn = document.getElementById("withiaBtn");
   const addBtn = document.getElementById("addBtn");
 
@@ -91,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
+  if (Btn) {
+    compteBtn.addEventListener("click", () => {
       location.href = "login.html";
     });
   }
