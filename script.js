@@ -3,12 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const SUPABASE_URL = "https://waljqaxkbvzidkrzbcbz.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbGpxYXhrYnZ6aWRrcnpiY2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4OTA3MDcsImV4cCI6MjA4NDQ2NjcwN30.9lBgfkJMCLk2D-gXjxj9bV5b5x-HZxY_cEBrdlsExBw";
 
-  if (!window.supabase) {
+  const hasSupabase = !!window.supabase;
+  if (!hasSupabase) {
     console.error("Supabase SDK non chargé. Vérifie le <script src='...supabase...'> AVANT script.js");
-    return;
   }
-
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
   // ====== ELEMENTS ======
   const searchEl = document.getElementById("search");
@@ -31,9 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const value = searchEl.value.toLowerCase().trim();
       const words = value.split(" ").filter(Boolean);
 
-      getImages().forEach(img => {
+      getImages().forEach((img) => {
         const tags = (img.dataset.tags || "").toLowerCase();
-        const ok = words.every(w => tags.includes(w));
+        const ok = words.every((w) => tags.includes(w));
         img.style.display = ok ? "block" : "none";
       });
     });
@@ -45,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     viewerImg.src = src;
     viewer.style.display = "flex";
   }
+
   function closeViewer() {
     if (!viewer || !viewerImg) return;
     viewer.style.display = "none";
@@ -52,15 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (gallery) {
-    // event delegation (plus fiable)
     gallery.addEventListener("click", (e) => {
       const img = e.target.closest("img");
       if (!img) return;
+      if (!img.src) return;
       openViewer(img.src);
     });
   }
 
   if (viewer) viewer.addEventListener("click", closeViewer);
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeViewer();
   });
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== RANDOM ======
   if (randomBtn) {
     randomBtn.addEventListener("click", () => {
-      const visible = getImages().filter(img => img.style.display !== "none");
+      const visible = getImages().filter((img) => img.style.display !== "none" && img.src);
       if (!visible.length) return;
 
       const img = visible[Math.floor(Math.random() * visible.length)];
@@ -95,13 +96,21 @@ document.addEventListener("DOMContentLoaded", () => {
     addBtn.style.display = "inline-flex";
 
     addBtn.addEventListener("click", async () => {
-      const { data: { session } } = await sb.auth.getSession();
+      // si supabase pas chargé -> on envoie sur login direct (évite crash)
+      if (!sb) {
+        location.href = "login.html";
+        return;
+      }
 
+      const { data: { session } = {} } = await sb.auth.getSession();
+
+      // pas connecté
       if (!session?.user) {
         location.href = "connectetoi.html";
         return;
       }
 
+      // check role
       const { data: profile, error } = await sb
         .from("profiles")
         .select("role")
@@ -126,34 +135,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    // ====== HEADER HIDE ON SCROLL (FIX) ======
+  // ====== HEADER HIDE ON SCROLL (STABLE) ======
   const header = document.querySelector("header");
   if (header) {
     let lastScroll = window.scrollY;
+    let hidden = false;
 
     window.addEventListener("scroll", () => {
-      const currentScroll = window.scrollY;
+      const current = window.scrollY;
+      const diff = current - lastScroll;
 
-      // descend -> cache
-      if (currentScroll > lastScroll && currentScroll > 80) {
+      // descend -> cache après un seuil
+      if (diff > 6 && current > 80 && !hidden) {
         header.classList.add("hide");
+        hidden = true;
       }
 
-      // remonte -> montre direct
-      if (currentScroll < lastScroll) {
+      // remonte -> affiche direct
+      if (diff < -6 && hidden) {
         header.classList.remove("hide");
+        hidden = false;
       }
 
-      // tout en haut -> montre toujours
-      if (currentScroll <= 5) {
+      // tout en haut -> toujours visible
+      if (current <= 5) {
         header.classList.remove("hide");
+        hidden = false;
       }
 
-      lastScroll = currentScroll;
+      lastScroll = current;
     }, { passive: true });
   }
 
-
-  console.log("✅ script.js OK (no redeclare, Supabase OK)");
+  console.log("✅ script.js OK");
 });
-
