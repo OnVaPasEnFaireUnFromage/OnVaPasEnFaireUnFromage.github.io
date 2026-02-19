@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Upload — Sans IA</title>
   <link rel="stylesheet" href="upload.css">
+
+  <!-- Supabase CDN -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
-<header>
-  <h3><a href="withoutia.html">Goon Multiverse 🔥</a></h3>
+<header class="topbar">
+  <a href="withoutia.html" class="logo">Goon Multiverse 🔥</a>
 </header>
 
-<main class="page">
-  <h2>Upload — Sans IA</h2>
+<main class="center">
 
-  <div class="card">
-    <label>URL de l'image</label>
-    <input id="url" type="text" placeholder="https://..." />
+  <div class="upload-box">
 
-    <label>Tags</label>
-    <input id="tags" type="text" placeholder="re zero rem ..." />
+    <h2>Upload — Sans IA</h2>
 
-    <label>Description</label>
-    <textarea id="description" placeholder="..."></textarea>
+    <input id="url" type="text" placeholder="URL de l'image">
+    <input id="tags" type="text" placeholder="Tags">
+    <textarea id="description" placeholder="Description"></textarea>
 
-    <button id="publishBtn">Publier</button>
-    <div id="msg"></div>
+    <button id="publish">Publier</button>
+
+    <a href="withoutia.html" class="back">← Retour</a>
+
+    <p id="msg"></p>
+
   </div>
+
 </main>
 
-<script>const SECTION = "withoutia";</script>
-<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="uploadwithoutia.js"></script>
-
 </body>
 </html>

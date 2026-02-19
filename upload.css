@@ -1,68 +1,95 @@
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#0f0f10;
-  color:white;
+/* ===== BACKGROUND ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #111, #000);
+  color: white;
 }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 25px;
-  background:#151515;
+/* ===== HEADER ===== */
+.topbar {
+  padding: 20px 40px;
+  border-bottom: 1px solid #222;
 }
 
-.back{
-  color:#aaa;
-  text-decoration:none;
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
 }
 
-.upload-wrap{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:80vh;
+.logo:hover {
+  color: #9d4edd;
 }
 
-.card{
-  background:#1a1a1a;
-  padding:25px;
-  border-radius:12px;
-  width:350px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  box-shadow:0 0 20px rgba(0,0,0,.6);
+/* ===== CENTER ===== */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
 }
 
-input, textarea{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#111;
-  color:white;
+/* ===== BOX ===== */
+.upload-box {
+  width: 420px;
+  background: #111;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px #000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-textarea{
-  resize:none;
-  height:80px;
+/* ===== INPUTS ===== */
+.upload-box input,
+.upload-box textarea {
+  background: #000;
+  border: 1px solid #222;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  outline: none;
 }
 
-button{
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#2a2a2a;
-  color:white;
-  cursor:pointer;
+.upload-box textarea {
+  height: 120px;
+  resize: none;
 }
 
-button:hover{
-  background:#3a3a3a;
+/* ===== BUTTON ===== */
+.upload-box button {
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #6a00ff, #9d4edd);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-#msg{
-  margin-top:5px;
-  font-size:.9rem;
+.upload-box button:hover {
+  transform: scale(1.05);
+}
+
+/* ===== BACK ===== */
+.back {
+  text-align: center;
+  color: #aaa;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.back:hover {
+  color: white;
+}
+
+/* ===== MSG ===== */
+#msg {
+  text-align: center;
+  font-size: 14px;
 }
