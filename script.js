@@ -120,21 +120,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return sb;
   }
 
-  // ===== COMPTE BUTTON (login si pas co, account si co) =====
-  async function handleCompteClick() {
+  // ===== COMPTE BUTTON =====
+if (compteBtn) {
+  compteBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    // si supabase pas prêt → login direct
     if (!sb) {
       location.href = "login.html";
       return;
     }
+
     const { data: { session } = {} } = await sb.auth.getSession();
 
     if (!session?.user) {
       location.href = "login.html";
-      return;
+    } else {
+      location.href = "account.html";
     }
-    location.href = "account.html";
-  }
-
+  });
+}
   // ===== ADD BUTTON (always visible, redirect based on auth + role) =====
   async function handleAddClick() {
     if (!sb) {
