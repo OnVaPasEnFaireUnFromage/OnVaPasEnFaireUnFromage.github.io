@@ -60,20 +60,23 @@ body {
   resize: none;
 }
 
-/* ===== BUTTON ===== */
+/* ===== BUTTON (FIX NORMAL STYLE) ===== */
 .upload-box button {
   padding: 14px;
-  border: none;
   border-radius: 12px;
-  background: linear-gradient(90deg, #6a00ff, #9d4edd);
+  border: 1px solid #333;
+  background: #1a1a1a;
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.15s ease;
 }
 
+/* hover comme les boutons du header */
 .upload-box button:hover {
-  transform: scale(1.05);
+  background: #242424;
+  border-color: #555;
+  transform: none; /* enlève le scale violet */
 }
 
 /* ===== BACK ===== */
@@ -82,6 +85,7 @@ body {
   color: #aaa;
   text-decoration: none;
   margin-top: 10px;
+  display: block;
 }
 
 .back:hover {
