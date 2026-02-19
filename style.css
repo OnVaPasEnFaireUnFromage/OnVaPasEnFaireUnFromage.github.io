@@ -1,234 +1,99 @@
-:root{
-  --bg:#0f0f10;
-  --panel:#1a1a1a;
-  --panel2:#151515;
-  --muted:#a7a7a7;
-  --text:#ffffff;
-  --accent:#2a2a2a;
-  --accent2:#3a3a3a;
-  --border:#2a2a2a;
-}
-
-/* reset rapide */
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-
-/* liens = pas soulignés, look "texte normal" */
-a{
-  color:inherit;
-  text-decoration:none;
+/* ===== BACKGROUND ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #111, #000);
+  color: white;
 }
 
 /* ===== HEADER ===== */
-header{
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-
-  padding: 14px 14px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:12px;
-
-  transition: transform .25s ease;
+.topbar {
+  padding: 20px 40px;
+  border-bottom: 1px solid #222;
 }
 
-header.hide{
-  transform: translateY(-75%);
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
 }
 
-header h3{
-  margin:0;
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: .5px;
-  text-align:center;
+.logo:hover {
+  color: #9d4edd;
 }
 
-/* bloc search + boutons */
-.search-box{
-  width:100%;
-  max-width: 520px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  align-items:center;
+/* ===== CENTER ===== */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
 }
 
-/* search */
-#search{
-  width:100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--accent);
-  color: var(--text);
-  outline:none;
+/* ===== BOX ===== */
+.upload-box {
+  width: 420px;
+  background: #111;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px #000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-#search::placeholder{
-  color: #bdbdbd;
-  opacity:.7;
-}
-
-/* boutons */
-.buttons{
-  width:100%;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-button{
-  padding: 10px 16px;
-  background: var(--accent);
-  color: var(--text);
-  border: 1px solid #3b3b3b;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  transition: background .2s ease, transform .08s ease, border-color .2s ease;
-}
-
-button:hover{
-  background: var(--accent2);
-  border-color: #555;
-}
-
-button:active{
-  transform: scale(.98);
-}
-
-/* ===== GALERIE ===== */
-#gallery{
+/* ===== INPUTS ===== */
+.upload-box input,
+.upload-box textarea {
+  background: #000;
+  border: 1px solid #222;
+  color: white;
   padding: 12px;
-  display:grid;
-  gap:10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-/* thumbnails style (rule34-like) */
-#gallery img{
-  width:100%;
-  height:auto;
-  object-fit: contain;
-  border-radius: 6px;
-  cursor:pointer;
-  background:#0b0b0c;
-  border: 1px solid rgba(255,255,255,.06);
-}
-
-
-#gallery img:hover{
-  border-color: rgba(255,255,255,.16);
-}
-
-/* Desktop */
-@media (min-width: 900px){
-  header{
-    flex-direction:row;
-    justify-content:space-between;
-    align-items:center;
-    gap:16px;
-    padding: 16px 20px;
-  }
-
-  header h3{
-    text-align:left;
-    font-size: 2.2rem;
-    white-space:nowrap;
-  }
-
-  .search-box{
-    flex-direction:row;
-    align-items:center;
-    justify-content:flex-end;
-    max-width: 900px;
-    gap:12px;
-  }
-
-  #search{
-    max-width: 420px;
-  }
-
-  .buttons{
-    width:auto;
-    justify-content:flex-end;
-  }
-
-  #gallery{
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  }
-}
-
-/* ===== VIEWER (plein écran) ===== */
-#viewer{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.92);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index: 2000;
-  padding: 18px;
-}
-
-#viewer img{
-  max-width: 95vw;
-  max-height: 95vh;
-  object-fit: contain;
   border-radius: 10px;
+  outline: none;
 }
 
-/* ===== FOOTER (bandeau gris) ===== */
-footer{
-  margin-top: 12px;
-  background: var(--panel);
-  border-top: 1px solid var(--border);
-  padding: 14px 10px;
-  text-align:center;
-  color: var(--muted);
+.upload-box textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* ===== BUTTON (FIX NORMAL STYLE) ===== */
+.upload-box button {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+/* hover comme les boutons du header */
+.upload-box button:hover {
+  background: #242424;
+  border-color: #555;
+  transform: none; /* enlève le scale violet */
+}
+
+/* ===== BACK ===== */
+.back {
+  text-align: center;
+  color: #aaa;
+  text-decoration: none;
+  margin-top: 10px;
+  display: block;
+}
+
+.back:hover {
+  color: white;
+}
+
+/* ===== MSG ===== */
+#msg {
+  text-align: center;
   font-size: 14px;
-}
-
-footer .name{
-  color: var(--text);
-  font-weight: 600;
-}
-
-footer h6{
-  margin: 8px 0 0;
-  font-size: 12px;
-  color: #7a7a7a;
-  font-weight: normal;
-}
-
-/* ===== HEADER HIDE ON SCROLL ===== */
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: transform 0.25s ease;
-}
-
-/* quand le JS ajoute .hide */
-header.hide {
-  transform: translateY(-80%);
 }
