@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const withoutiaBtn = document.getElementById("withoutiaBtn");
 
   // Compte peut s'appeler loginBtn ou compteBtn selon tes pages
-  const loginBtn = document.getElementById("loginBtn");
+  const compteBtn =
+    document.getElementById("compteBtn") || document.getElementById("loginBtn");
 
   const addBtn = document.getElementById("addBtn");
 
