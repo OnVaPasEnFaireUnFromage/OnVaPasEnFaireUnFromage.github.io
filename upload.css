@@ -97,3 +97,9 @@ body {
   text-align: center;
   font-size: 14px;
 }
+
+/*liens pas soulignés*/
+a{
+  color:inherit;
+  text-decoration:none;
+}
